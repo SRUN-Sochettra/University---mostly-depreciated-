@@ -117,8 +117,8 @@ class CartModel extends ChangeNotifier {
 }
 
 class CartScope extends InheritedNotifier<CartModel> {
-  const CartScope({super.key, required CartModel cart, required Widget child})
-    : super(notifier: cart, child: child);
+  const CartScope({super.key, required CartModel cart, required super.child})
+    : super(notifier: cart);
 
   static CartModel of(BuildContext context) {
     final scope = context.dependOnInheritedWidgetOfExactType<CartScope>();
@@ -1780,8 +1780,6 @@ class _NetworkImage extends StatelessWidget {
   const _NetworkImage({
     required this.url,
     required this.fit,
-    this.cacheWidth,
-    this.cacheHeight,
   });
 
   @override

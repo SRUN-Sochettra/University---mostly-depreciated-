@@ -5,6 +5,8 @@
 /// - Using Wikimedia Commons "Special:FilePath" URLs (redirect to the actual file)
 ///   These are public domain / Creative Commons licensed images.
 /// ----------------------------------------------------------------------------
+library;
+
 
 
 // --- data.dart (image section) ---
