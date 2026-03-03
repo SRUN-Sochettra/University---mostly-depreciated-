@@ -1,0 +1,189 @@
+#div1 {
+    background: url(img_flower.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#div2 {
+    background: url(img_flower.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#example1 {
+    background: url(/web/week1/html/images/2.jpg) left top no-repeat,
+                url(/web/week1/html/images/nhem.jpg) right bottom no-repeat,
+                url(/web/week1/html/images/test.png) left top repeat;
+    background-size: 100px 100px;
+}
+
+#html {
+    background: url(/web/week1/html/images/NUM\ logo.png) center center fixed;
+    background-size: cover;
+}
+
+#example2 {
+    border: 10px solid black;
+    padding: 35px;
+    background: url(/web/week1/html/images/NUM\ logo.png);
+    background-repeat: no-repeat;
+    background-origin: content-box;
+}
+
+a {
+    text-decoration: none;
+}
+
+h1 {
+    text-decoration: underline;
+    display: inline;
+    text-shadow: 3px 2px red;
+}
+
+h2 {
+    text-decoration: overline;
+    display: inline;
+}
+
+h3 {
+    text-decoration: line-through;
+    display: inline;
+}
+
+p.uppercase {
+    text-transform: uppercase;
+    word-spacing: 25px;
+}
+
+p.lowercase {
+    text-transform: lowercase;
+}
+
+p.capitalize {
+    text-transform: capitalize;
+}
+
+#border1 {
+    border: 20px solid red;
+}
+
+#border2 {
+    border: 20px dashed green;
+}
+
+#border3 {
+    border: 20px dotted blue;
+}
+
+#border4 {
+    border: 20px double yellow;
+}
+
+#border5 {
+    border: 20px ridge orange;
+}
+
+#border6 {
+    border: 20px groove purple;
+}
+
+#border7 {
+    border: 20px inset gray;
+}
+
+#border8 {
+    border: 20px outset black;
+}
+
+@media (max-width: 768px) {
+    body {
+        background-color: red;
+    }
+}
+
+@media (min-width: 768px) {
+    body {
+        background-color: orangered;
+    }
+}
+
+@media (min-width: 1024px) {
+    body {
+        background-color: white;
+    }
+}
+
+.outercontainer {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.innercontainer1 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row;
+    width: 100%;
+}
+
+.innercontainer2 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    width: 100%;
+}
+
+.innercontainer3 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: row-reverse;
+    width: 100%;
+}
+
+.innercontainer4 {
+    display: flex;
+    gap: 1rem;
+    flex-direction: column-reverse;
+    width: 100%;
+}
+
+#box1 {
+    background-color: red;
+    border-radius: 3px;
+    padding: 0;
+    text-align: center;
+    margin: 4px 20px 4px 0;
+    color: red;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 1.5;
+    width: 98%;
+}
+
+#box2 {
+    background-color: blue;
+    border-radius: 3px;
+    padding: 0;
+    text-align: center;
+    margin: 4px 20px 4px 0;
+    color: blue;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 1.5;
+    width: 98%;
+}
+
+#box3 {
+    background-color: yellow;
+    border-radius: 3px;
+    padding: 0;
+    text-align: center;
+    margin: 4px 20px 4px 0;
+    color: yellow;
+    font-weight: bold;
+    font-size: 10px;
+    line-height: 1.5;
+    width: 98%;
+}
+
