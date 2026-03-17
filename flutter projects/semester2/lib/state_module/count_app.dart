@@ -10,8 +10,7 @@ class CountApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool dark = context.watch<ThemeLogic>().dark;
-    Color seedColor = Colors.blue;
-
+    Color seedColor = Colors.pink;
     double size = context.watch<CounterLogic>().counter.toDouble();
 
     return MaterialApp(
@@ -20,7 +19,7 @@ class CountApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.light,
         colorScheme: ColorScheme.fromSeed(seedColor: seedColor),
-        textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 16 + size)),
+        textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 18 + size)),
       ),
       darkTheme: ThemeData(
         brightness: Brightness.dark,
@@ -28,7 +27,7 @@ class CountApp extends StatelessWidget {
           seedColor: seedColor,
           brightness: Brightness.dark,
         ),
-        textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 16 + size)),
+        textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 18 + size)),
       ),
     );
   }
