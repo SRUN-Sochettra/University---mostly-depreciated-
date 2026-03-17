@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_num_2/state_module/theme_logic.dart';
+import 'package:semester2/state_module/theme_logic.dart';
 import 'detail_screen.dart';
 import 'counter_logic.dart';
 import 'package:provider/provider.dart';
