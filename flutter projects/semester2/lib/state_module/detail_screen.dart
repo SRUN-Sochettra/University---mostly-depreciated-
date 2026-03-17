@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'counter_logic.dart';
 
-class DetailScreen extends StatelessWidget {
+class DetailScreen extends StatefulWidget {
   const DetailScreen({super.key});
 
   @override
+  State<DetailScreen> createState() => _DetailScreenState();
+}
+
+class _DetailScreenState extends State<DetailScreen> {
+
+  @override
   Widget build(BuildContext context) {
-    int counter = context.watch<CounterLogic>().counter;
+
+    int cnt = context.watch<CounterLogic>().counter;
 
     return Scaffold(
       appBar: AppBar(
@@ -30,12 +37,10 @@ class DetailScreen extends StatelessWidget {
 
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(
-            "Flutter is an open-source UI software development kit created by Google. It can be used to develop cross platform applications from a single codebase.",
-            style: TextStyle(fontSize: 18 + counter.toDouble()),
-          ),
+        child: Text(
+          "The Material 3 Design Kit provides a comprehensive introduction "
+          "to the design system, with styles and components to help you get started.",
+          style: TextStyle(fontSize: 18 + cnt.toDouble()),
         ),
       ),
     );
