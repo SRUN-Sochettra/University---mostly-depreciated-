@@ -1,50 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_num_2/state_module/theme_logic.dart';
 import 'detail_screen.dart';
 import 'counter_logic.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
+
+    int size = context.watch<CounterLogic>().counter;
+    bool dark = context.watch<ThemeLogic>().dark;
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Home Screen"),
         actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => DetailScreen()));
-            },
-            icon: Icon(Icons.settings),
-          ),
-        ],
-      ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              FilledButton(
-                onPressed: () {
-                  context.read<CounterLogic>().decrease();
+              IconButton(
+                onPressed: (){
+                  context.read<ThemeLogic>().toggleDark();
                 },
-                child: Text("Decrease"),
+                icon: Icon(dark ? Icons.dark_mode : Icons.light_mode),
               ),
-              FilledButton(
-                onPressed: () {
+              IconButton(
+                onPressed: (){
                   context.read<CounterLogic>().increase();
                 },
-                child: Text("Increase"),
+                icon: Icon(Icons.remove)
               ),
+              IconButton(
+                onPressed: (){
+                  context.read<CounterLogic>().increase();
+                },
+                icon: Icon(Icons.add)
+              )
             ],
           ),
-          Text("Counter: ${context.watch<CounterLogic>().counter}"),
+          IconButton(
+            onPressed: (){
+              Navigator.of(
+                context,
+              ).push(MaterialPageRoute(builder: (context) => const DetailScreen()));
+            },
+            icon: Icon(Icons.settings),
+          )
         ],
       ),
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Text(
+          "Flutter is an open-source UI software development kit created by Google. It can be used to develop cross platform applications from a single codebase.",
+          style: TextStyle(fontSize: 18 + size.toDouble()),
+        ),
+      ),
     );
+      
   }
 }

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="javascript.js"></script>
+</head>
+<body>
+    <button id="myButton">Click me</button>
+    <script>
+        document.getElementById("myButton").addEventListener("click", function() {
+            alert("Button clicked!");
+        });
+    </script>
+    <button id="arrowfunction">Arrow Function
+        <script>
+            document.getElementById("arrowfunction").addEventListener("click", () => {
+                alert("Arrow function button clicked!");
+            });
+        </script>
+    </button>
+    <button id="counter">Counter
+        <script>
+            let count = 0;
+            document.getElementById("counter").addEventListener("click", () => {
+                count++;
+                alert(`Counter: ${count}`);
+                console.log(`Counter: ${count}`);
+            });
+        </script>
+    </button>
+    <button id="countandmultiply">Count and Multiply
+        <script>
+            let count2 = 1;
+            
+            const multiply = (a, b) => a * b;
+            document.getElementById("countandmultiply").addEventListener("click", () => {
+                count2++;
+                const result = multiply(count2, 2);
+                alert(`Count: ${count2}, ${count2} x 2 equals ${result}`);
+                console.log(`Count: ${count2}, ${count2} x 2 equals ${result}`);
+            });
+
+            setInterval(() => {
+                document.getElementById("countandmultiply").innerHTML = `${count2} x 2`;
+            }, 1000);
+
+        </script>
+    </button>
+</body>
+</html>

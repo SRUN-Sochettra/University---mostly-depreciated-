@@ -10,25 +10,32 @@ class DetailScreen extends StatelessWidget {
     int counter = context.watch<CounterLogic>().counter;
 
     return Scaffold(
-      appBar: AppBar(title: Text("Detail Screen")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            FilledButton(
-              onPressed: () {
-                context.read<CounterLogic>().decrease();
-              },
-              child: Text("Decrease"),
-            ),
-            FilledButton(
-              onPressed: () {
-                context.read<CounterLogic>().increase();
-              },
-              child: Text("Increase"),
-            ),
-            Text("Counter: $counter"),
-          ],
+      appBar: AppBar(
+        title: const Text("Detail Screen"),
+        actions: [
+          IconButton(
+            onPressed: () {
+              context.read<CounterLogic>().decrease();
+            },
+            icon: const Icon(Icons.remove),
+          ),
+          IconButton(
+            onPressed: () {
+              context.read<CounterLogic>().increase();
+            },
+            icon: const Icon(Icons.add),
+          ),
+        ],
+      ),
+
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Text(
+            "Flutter is an open-source UI software development kit created by Google. It can be used to develop cross platform applications from a single codebase.",
+            style: TextStyle(fontSize: 18 + counter.toDouble()),
+          ),
         ),
       ),
     );
