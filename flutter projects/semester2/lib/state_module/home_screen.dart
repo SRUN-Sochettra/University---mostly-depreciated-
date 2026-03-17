@@ -9,45 +9,46 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     int size = context.watch<CounterLogic>().counter;
     bool dark = context.watch<ThemeLogic>().dark;
 
     return Scaffold(
       appBar: AppBar(
         title: Text("Home Screen"),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
         actions: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               IconButton(
-                onPressed: (){
+                onPressed: () {
                   context.read<ThemeLogic>().toggleDark();
                 },
-                icon: Icon(dark ? Icons.dark_mode : Icons.light_mode),
+                icon: Icon(dark ? Icons.light_mode : Icons.dark_mode),
               ),
               IconButton(
-                onPressed: (){
+                onPressed: () {
                   context.read<CounterLogic>().increase();
                 },
-                icon: Icon(Icons.remove)
+                icon: Icon(Icons.remove),
               ),
               IconButton(
-                onPressed: (){
+                onPressed: () {
                   context.read<CounterLogic>().increase();
                 },
-                icon: Icon(Icons.add)
-              )
+                icon: Icon(Icons.add),
+              ),
             ],
           ),
           IconButton(
-            onPressed: (){
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (context) => const DetailScreen()));
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const DetailScreen()),
+              );
             },
             icon: Icon(Icons.settings),
-          )
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -58,6 +59,5 @@ class HomeScreen extends StatelessWidget {
         ),
       ),
     );
-      
   }
 }
