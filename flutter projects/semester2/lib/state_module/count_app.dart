@@ -11,6 +11,7 @@ class CountApp extends StatelessWidget {
   Widget build(BuildContext context) {
     bool dark = context.watch<ThemeLogic>().dark;
     Color seedColor = Colors.pink;
+    Color secondaryColor = Colors.lime.shade300;
     double size = context.watch<CounterLogic>().counter.toDouble();
 
     return MaterialApp(
