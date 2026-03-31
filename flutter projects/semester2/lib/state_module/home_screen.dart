@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
     try {
       final response = await http.get(
         Uri.parse("https://api.escuelajs.co/api/v1/products"),
-      ).timeout(const Duration(seconds: 10));
+      );
       if (response.statusCode == 200) {
         final List list = jsonDecode(response.body);
         return list.map((x) => x as Map<String, dynamic>).toList();
@@ -106,13 +106,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildBody() {
     return RefreshIndicator(
       onRefresh: () async {
-        final future = _readApiData();
         setState(() {
-          _futureData = future;
+          _futureData = _readApiData();
         });
-        try {
-          await future;
-        } catch (_) {}
       },
       child: FutureBuilder<List<Map<String, dynamic>>>(
         future: _futureData,
