@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'state_module/state_provider.dart';
+import 'state_module/count_app.dart';
 
 void main() {
-  runApp(stateProvider());
+  runApp(CountApp());
 }
