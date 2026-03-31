@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'counter_logic.dart';
 
 class DetailScreen extends StatefulWidget {
+  const DetailScreen({super.key});
+
   @override
   State<DetailScreen> createState() => _DetailScreenState();
 }
