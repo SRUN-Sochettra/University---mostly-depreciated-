@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
         IconButton(
           onPressed: () => Navigator.of(
             context,
-          ).push(MaterialPageRoute(builder: (context) => DetailScreen())),
+          ).push(MaterialPageRoute(builder: (context) => const DetailScreen())),
           icon: const Icon(Icons.settings),
         ),
       ],
@@ -96,6 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (raw.startsWith('[')) raw = raw.substring(1);
     if (raw.endsWith(']')) raw = raw.substring(0, raw.length - 1);
     raw = raw.replaceAll('"', '').trim();
+    if (raw.contains(',')) {
+      raw = raw.split(',').first.trim();
+    }
 
     return raw;
   }
@@ -111,29 +114,37 @@ class _HomeScreenState extends State<HomeScreen> {
         future: _futureData,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 48, color: Colors.red),
-                  const SizedBox(height: 12),
-                  Text(
-                    snapshot.error.toString(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 14),
+            return ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(Icons.error_outline, size: 48, color: Colors.red),
+                        const SizedBox(height: 12),
+                        Text(
+                          snapshot.error.toString(),
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        const SizedBox(height: 16),
+                        FilledButton.icon(
+                          onPressed: () {
+                            setState(() {
+                              _futureData = _readApiData();
+                            });
+                          },
+                          icon: const Icon(Icons.refresh),
+                          label: const Text("RETRY"),
+                        ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 16),
-                  FilledButton.icon(
-                    onPressed: () {
-                      setState(() {
-                        _futureData = _readApiData();
-                      });
-                    },
-                    icon: const Icon(Icons.refresh),
-                    label: const Text("RETRY"),
-                  ),
-                ],
-              ),
+                ),
+              ],
             );
           }
 
@@ -149,7 +160,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildGridView(List<Map<String, dynamic>>? items) {
     if (items == null || items.isEmpty) {
-      return const Center(child: Icon(Icons.list, size: 48));
+      return ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.8,
+            child: const Center(child: Icon(Icons.list, size: 48)),
+          ),
+        ],
+      );
     }
 
     return GridView.builder(
