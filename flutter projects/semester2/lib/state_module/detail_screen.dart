@@ -13,31 +13,34 @@ class DetailScreen extends StatefulWidget {
 class _DetailScreenState extends State<DetailScreen> {
   @override
   Widget build(BuildContext context) {
-    int cnt = context.watch<CounterLogic>().counter;
+    final cnt = context.watch<CounterLogic>().counter;
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Detail Screen"),
+        title: const Text("Detail Screen"),
         actions: [
           IconButton(
             onPressed: () {
               context.read<CounterLogic>().decrease();
             },
-            icon: Icon(Icons.remove),
+            icon: const Icon(Icons.remove),
           ),
           IconButton(
             onPressed: () {
               context.read<CounterLogic>().increase();
             },
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
           ),
         ],
       ),
       body: SingleChildScrollView(
-        physics: BouncingScrollPhysics(),
-        child: Text(
-          "The Material 3 Design Kit provides a comprehensive introduction to the design system, with styles and components to help you get started.",
-          // style: TextStyle(fontSize: 18 + cnt.toDouble()),
+        physics: const BouncingScrollPhysics(),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            "The Material 3 Design Kit provides a comprehensive introduction to the design system, with styles and components to help you get started.",
+            style: TextStyle(fontSize: 18 + cnt.toDouble()),
+          ),
         ),
       ),
     );
