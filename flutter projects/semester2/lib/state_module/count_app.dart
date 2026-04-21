@@ -17,7 +17,7 @@ class CountApp extends StatelessWidget {
     double size = context.watch<CounterLogic>().counter.toDouble();
 
     return MaterialApp(
-      home: const HomeScreen(),
+      home: HomeScreen(),
       themeMode: dark ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData(
         brightness: Brightness.light,
@@ -25,7 +25,7 @@ class CountApp extends StatelessWidget {
         textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 18 + size)),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: secondaryColor,
-          shape: const CircleBorder()
+          shape: CircleBorder()
         ),
         appBarTheme: AppBarTheme(
           backgroundColor: appBarColor,
@@ -41,7 +41,7 @@ class CountApp extends StatelessWidget {
         textTheme: TextTheme(bodyMedium: TextStyle(fontSize: 18 + size)),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           backgroundColor: secondaryColor.withAlpha(96), //0 dark -> 255 light
-          shape: const CircleBorder()
+          shape: CircleBorder()
         ),
          appBarTheme: AppBarTheme(
           backgroundColor: appBarColor.withAlpha(180),

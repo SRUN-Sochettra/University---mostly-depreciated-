@@ -6,16 +6,12 @@ class CounterLogic extends ChangeNotifier {
   int get counter => _counter;
 
   void decrease(){
-    if (_counter > -17) {
-      _counter--;
-      notifyListeners();
-    }
+    _counter--;
+    notifyListeners();
   }
 
   void increase(){
-    if (_counter < 100) {
-      _counter++;
-      notifyListeners();
-    }
+    _counter++;
+    notifyListeners();
   }
 }
