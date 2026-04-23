@@ -1,40 +1,50 @@
-import 'dart:convert';
+// import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
 import 'counter_logic.dart';
 import 'detail_screen.dart';
 import 'theme_logic.dart';
+import 'product_service.dart';
+import 'product_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() {
+    return _HomeScreenState();
+  }
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int sum(int a, int b) {
-    return a + b;
-  }
+  bool _showUpIcon = false;
+  bool _gridStyle = false;
+  final ScrollController _scroller = ScrollController();
 
-  Future<int> add(int a, int b) {
-    return Future.value(a + b);
+  @override
+  void initState() {
+    super.initState();
+    _scroller.addListener(() {
+      if (_scroller.position.pixels < 500) {
+        setState(() {
+          _showUpIcon = false;
+        });
+      } else {
+        setState(() {
+          _showUpIcon = true;
+        });
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    add(20, 30).then((value) {
-      debugPrint("value = $value");
-    });
-
-    int s = sum(10, 20);
-    debugPrint("s = $s");
-
     return Scaffold(
       appBar: _buildAppBar(),
+      floatingActionButton: _showUpIcon ? _buildFloating() : null,
       drawer: _buildDrawer(),
       body: _buildBody(),
     );
@@ -69,69 +79,36 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         IconButton(
           onPressed: () {
-            Navigator.of(
-              context,
-            ).push(MaterialPageRoute(builder: (context) => DetailScreen()));
+            setState(() {
+              _gridStyle = !_gridStyle;
+            });
+
           },
-          icon: Icon(Icons.settings),
+          icon: Icon(_gridStyle ? Icons.list : Icons.grid_on),
         ),
+        // IconButton(
+        //   onPressed: () {
+        //     Navigator.of(
+        //       context,
+        //     ).push(MaterialPageRoute(builder: (context) => DetailScreen()));
+        //   },
+        //   icon: Icon(Icons.settings),
+        // ),
       ],
     );
   }
 
-  Future<String> _readFakeData() {
-    return Future.delayed(Duration(seconds: 2), () {
-      return "Some Fake Data";
-    });
-  }
-
-  // Future<String> _readRealData() async {
-  //   try {
-  //     http.Response response = await http.get(
-  //       Uri.parse("https://api.escuelajs.co/api/v1/products"),
-  //     );
-  //     if(response.statusCode == 200){
-  //       return response.body;
-  //     }else{
-  //       throw Exception("Error status code: ${response.statusCode}");
-  //     }
-  //   } catch (e) {
-  //     throw Exception(e.toString());
-  //   }
-  // }
-
-  Future<List<Map<String, dynamic>>> _readApiData() async {
-    try {
-      http.Response response = await http.get(
-        Uri.parse("https://api.escuelajs.co/api/v1/products"),
-      );
-      if (response.statusCode == 200) {
-        String res = response.body;
-
-        List list = jsonDecode(res);
-        List<Map<String, dynamic>> jsonList = list
-            .map((x) => x as Map<String, dynamic>)
-            .toList();
-        return jsonList;
-      } else {
-        throw Exception("Error status code: ${response.statusCode}");
-      }
-    } catch (e) {
-      throw Exception(e.toString());
-    }
-  }
-
-  late Future<List<Map<String, dynamic>>> _futureData = _readApiData();
+  late Future<List<ProductModel>> _futureData = ProductService().readApiData();
 
   Widget _buildBody() {
     return Center(
       child: RefreshIndicator(
         onRefresh: () async {
           setState(() {
-            _futureData = _readApiData();
+            _futureData = ProductService().readApiData();
           });
         },
-        child: FutureBuilder<List<Map<String, dynamic>>>(
+        child: FutureBuilder<List<ProductModel>>(
           future: _futureData,
           builder: (context, snapshot) {
             if (snapshot.hasError) {
@@ -142,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   FilledButton(
                     onPressed: () {
                       setState(() {
-                        _futureData = _readApiData();
+                        _futureData = ProductService().readApiData();
                       });
                     },
                     child: Text("RETRY"),
@@ -162,40 +139,77 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildGridView(List<Map<String, dynamic>>? items) {
+  @override
+  void dispose() {
+    _scroller.dispose();
+    super.dispose();
+  }
+
+  Widget _buildFloating() {
+    return FloatingActionButton(
+      onPressed: () {
+        _scroller.animateTo(
+          0,
+          duration: Duration(milliseconds: 400),
+          curve: Curves.easeInOut,
+        );
+      },
+      child: Icon(Icons.arrow_upward),
+    );
+  }
+
+  Widget _buildGridView(List<ProductModel>? items) {
     if (items == null) {
       return Center(child: Icon(Icons.list));
     }
 
     return GridView.builder(
+      controller: _scroller,
       physics: BouncingScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 3/5,
+        crossAxisCount: _gridStyle ? 2:1,
+        childAspectRatio: _gridStyle ? 3/5 : 4/3,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
         final item = items[index];
-        return Card(
-          child: Column(
-            children: [
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: BorderRadiusGeometry.circular(8),
-                  child: CachedNetworkImage(
-                    imageUrl: item["images"][0],
-                    placeholder: (_, _) => Container(color: Colors.grey,),
-                    errorWidget: (_, _, _) => Container(color: Colors.grey.shade800,),
-                    width: double.maxFinite,
-                    fit: BoxFit.cover,
+        return InkWell(
+          onTap: () {
+            Navigator.of(
+              context,
+            ).push(MaterialPageRoute(builder: (context) => DetailScreen(item)));
+          },
+          child: Card(
+            child: Column(
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: item.images[0],
+                      placeholder: (_, _) => Container(color: Colors.grey),
+                      errorWidget: (_, _, _) =>
+                          Container(color: Colors.grey.shade800),
+                      width: double.maxFinite,
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("${item['title']}"),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    item.title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  width: double.maxFinite,
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("USD ${item.price}", textAlign: TextAlign.right),
+                ),
+              ],
+            ),
           ),
         );
       },

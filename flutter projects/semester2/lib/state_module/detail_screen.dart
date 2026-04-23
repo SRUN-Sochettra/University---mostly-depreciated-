@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:semester2/state_module/product_model.dart';
 
 import 'counter_logic.dart';
 
 class DetailScreen extends StatefulWidget {
-  const DetailScreen({super.key});
+  const DetailScreen(ProductModel item, {super.key});
 
   @override
   State<DetailScreen> createState() => _DetailScreenState();
