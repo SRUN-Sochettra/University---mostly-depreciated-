@@ -2,12 +2,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import 'package:http/http.dart' as http;
-
 import 'counter_logic.dart';
 import 'detail_screen.dart';
 import 'theme_logic.dart';
-import 'product_service.dart';
+import 'gridstyle_logic.dart';
+import 'package:skeletonizer/skeletonizer.dart';
+import 'Product_service.dart';
 import 'product_model.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,8 +20,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  // bool _gridStyle = false;
+
   bool _showUpIcon = false;
-  bool _gridStyle = false;
   final ScrollController _scroller = ScrollController();
 
   @override
@@ -45,56 +46,124 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: _buildAppBar(),
       floatingActionButton: _showUpIcon ? _buildFloating() : null,
-      drawer: _buildDrawer(),
+      // drawer: _buildDrawer(),
       body: _buildBody(),
     );
   }
 
-  Widget _buildDrawer() {
-    return Drawer(backgroundColor: Theme.of(context).colorScheme.primary);
+  // Widget _buildDrawer() {
+  //   return Drawer(backgroundColor: Theme.of(context).colorScheme.primary);
+  // }
+
+  Widget _buildLoading() {
+    return Skeletonizer(
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(18),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: double.maxFinite,
+                height: 200,
+                color: Colors.pink,
+              ),
+              Text("a das dsd as da ds dsa da"),
+              Text("da ds dsa da"),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
-  AppBar _buildAppBar() {
-    bool dark = context.watch<ThemeLogic>().dark;
-    return AppBar(
-      title: Text("Home Screen"),
-      actions: [
-        IconButton(
-          onPressed: () {
-            context.read<ThemeLogic>().toggleDark();
-          },
-          icon: Icon(dark ? Icons.light_mode : Icons.dark_mode),
-        ),
-        IconButton(
-          onPressed: () {
-            context.read<CounterLogic>().decrease();
-          },
-          icon: Icon(Icons.remove),
-        ),
-        IconButton(
-          onPressed: () {
-            context.read<CounterLogic>().increase();
-          },
-          icon: Icon(Icons.add),
-        ),
-        IconButton(
-          onPressed: () {
-            setState(() {
-              _gridStyle = !_gridStyle;
-            });
+  Widget _buildSkeletonizer() {
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
 
-          },
-          icon: Icon(_gridStyle ? Icons.list : Icons.grid_on),
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    return Skeletonizer(
+      child: GridView.builder(
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth > 1000 ? (screenWidth - 1000) / 2 : 8,
+          vertical: 8,
         ),
-        // IconButton(
-        //   onPressed: () {
-        //     Navigator.of(
-        //       context,
-        //     ).push(MaterialPageRoute(builder: (context) => DetailScreen()));
-        //   },
-        //   icon: Icon(Icons.settings),
-        // ),
-      ],
+        // controller: _scroller,
+        // physics: BouncingScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: _gridStyle ? (isLandscape ? 4 : 2) : 1,
+          childAspectRatio: _gridStyle ? 3 / 5 : 3 / 3,
+        ),
+        itemCount: 20,
+        itemBuilder: (context, index) {
+          return Card(
+            child: Column(
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadiusGeometry.circular(8),
+                    child: Container(
+                      width: double.maxFinite,
+                      height: double.maxFinite,
+                      color: Colors.grey,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    "asd asd asd sd asd sad asd",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Container(
+                  width: double.maxFinite,
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text("asdasd sa d", textAlign: TextAlign.right),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  bool _gridStyle = true;
+  AppBar _buildAppBar() {
+    bool dark = context.watch<ThemLogic>().dark;
+    _gridStyle = context.watch<GridStyleLogic>().gridStyle;
+    return AppBar(
+      leading: const Icon(Icons.rocket_launch),
+      title: const Text("Spaceman Rocket"),
+      // actions: [
+      //   IconButton(
+      //     onPressed: () {
+      //       context.read<ThemLogic>().toggleDark();
+      //     },
+      //     icon: Icon(dark ? Icons.light_mode : Icons.dark_mode),
+      //   ),
+      //   IconButton(
+      //     onPressed: () {
+      //       context.read<CounterLogic>().decrease();
+      //     },
+      //     icon: Icon(Icons.remove),
+      //   ),
+      //   IconButton(
+      //     onPressed: () {
+      //       context.read<CounterLogic>().increase();
+      //     },
+      //     icon: Icon(Icons.add),
+      //   ),
+      //   IconButton(
+      //     onPressed: () {
+      //       context.read<GridStyleLogic>().toggleStyle();
+      //     },
+      //     icon: Icon(_gridStyle ? Icons.list : Icons.grid_view),
+      //   ),
+      // ],
     );
   }
 
@@ -131,7 +200,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (snapshot.connectionState == ConnectionState.done) {
               return _buildGridView(snapshot.data);
             } else {
-              return CircularProgressIndicator();
+              return _buildSkeletonizer();
             }
           },
         ),
@@ -162,13 +231,21 @@ class _HomeScreenState extends State<HomeScreen> {
     if (items == null) {
       return Center(child: Icon(Icons.list));
     }
+    bool isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return GridView.builder(
+      padding: EdgeInsets.symmetric(
+        horizontal: screenWidth > 1000 ? (screenWidth - 1000) / 2 : 8,
+        vertical: 8,
+      ),
       controller: _scroller,
       physics: BouncingScrollPhysics(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: _gridStyle ? 2:1,
-        childAspectRatio: _gridStyle ? 3/5 : 4/3,
+        crossAxisCount: _gridStyle ? (isLandscape ? 4 : 2) : 1,
+        childAspectRatio: _gridStyle ? 3 / 5 : 3 / 3,
       ),
       itemCount: items.length,
       itemBuilder: (context, index) {
@@ -198,7 +275,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    item.title,
+                    "${item.title}",
+
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
