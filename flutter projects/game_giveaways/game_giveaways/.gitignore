@@ -49,3 +49,11 @@ app.*.map.json
 
 # Kotlin build artifacts
 .kotlin/
+
+# Local iteration debris (one-shot installer scripts, archives, backups)
+*.ps1
+*.zip
+.lootdrop-backups/
+
+# Dart & Flutter DevTools local settings
+devtools_options.yaml

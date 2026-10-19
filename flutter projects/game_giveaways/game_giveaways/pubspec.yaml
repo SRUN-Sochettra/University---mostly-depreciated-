@@ -1,5 +1,5 @@
 name: game_giveaways
-description: "A new Flutter project."
+description: "LootDrop - browse free game giveaways from the GamerPower API."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -37,6 +37,16 @@ dependencies:
   flutter_riverpod: ^3.4.3
   http: ^1.6.0
   url_launcher: ^6.3.3
+  shared_preferences: ^2.5.6
+
+# NOTE (2026-10-19): shared_preferences_android 2.5.0 rewrote its Android
+# implementation to Pigeon-JNI and ships no R8 keep rules. With R8 minification
+# enabled (the default for release builds) the first SharedPreferences
+# instance never initialises on-device, so the app is stuck on its loading
+# screen. Upstream issue: https://github.com/flutter/flutter/issues/194701
+# Pin the last pre-JNI release until a fixed version is published.
+dependency_overrides:
+  shared_preferences_android: 2.4.28
 
 dev_dependencies:
   flutter_test:
