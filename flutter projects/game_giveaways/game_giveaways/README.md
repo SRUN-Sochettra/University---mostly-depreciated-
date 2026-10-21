@@ -123,7 +123,7 @@ Current status (Flutter 3.47.6 / Dart 3.13.5):
 
 ## Download the demo APK
 
-The demo is the release APK attached to the [v1.0.0 release](https://github.com/SRUN-Sochettra/game_giveaways/releases/latest):
+The demo is the release APK attached to the [v1.0.0 release](https://github.com/SRUN-Sochettra/LootDrop/releases/latest):
 
 **`lootdrop-v1.0.0-android.apk`**
 
@@ -180,4 +180,4 @@ Not verified: iOS / macOS / Linux / Windows / web builds, physical-device behavi
 
 **Srun Sochettra** — GitHub: [SRUN-Sochettra](https://github.com/SRUN-Sochettra)
 
-Source code: https://github.com/SRUN-Sochettra/game_giveaways
+Source code: https://github.com/SRUN-Sochettra/LootDrop
